@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class RobotController : MonoBehaviour
 {
-
+    //variables
     public string RoboName = "Terminator";
     public int RoboMaxHealth = 100;
     public int RoboCurrentHealth = 100;
     public int RoboAttackStrength = 15;
+    public bool guarded = false;
+
+    public RobotController enemyRobot;
 
     // Start is called before the first frame update
     void Start()
@@ -20,5 +23,10 @@ public class RobotController : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void DamageOpponent()
+    {
+        enemyRobot.RoboCurrentHealth -= RoboAttackStrength;
     }
 }
