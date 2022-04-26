@@ -12,6 +12,7 @@ public class RobotController : MonoBehaviour
     public bool guarded = false;
 
     public RobotController enemyRobot;
+    public RobotController playerRobot;
 
     // Start is called before the first frame update
     void Start()
@@ -22,11 +23,7 @@ public class RobotController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    private void DamageOpponent()
-    {
-        enemyRobot.RoboCurrentHealth -= RoboAttackStrength;
-    }
 }

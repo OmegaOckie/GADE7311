@@ -13,7 +13,6 @@ public class ButtonScripts : MonoBehaviour
 
     private void Start()
     {
-
     }
 
     public void damageOpponent()
@@ -29,6 +28,12 @@ public class ButtonScripts : MonoBehaviour
         }
 
         turnController.IncrementTurn();
+
+        if (opponent.RoboCurrentHealth < 1)
+        {
+            turnController.DisplayDeath(player);
+        }
+
     }
 
     public void guardRobot()
@@ -43,6 +48,11 @@ public class ButtonScripts : MonoBehaviour
         player.RoboCurrentHealth += player.RoboAttackStrength * 2;
 
         turnController.IncrementTurn();
+
+        if (player.RoboCurrentHealth > player.RoboMaxHealth)
+        {
+            player.RoboCurrentHealth = player.RoboMaxHealth;
+        }
     }
 
 }
