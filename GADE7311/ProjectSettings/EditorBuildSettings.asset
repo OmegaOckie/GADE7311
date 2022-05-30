@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 0606b6f319f260742b22f408d39d58d3
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/PlayerVsAIScene.unity
+    guid: 72b31ec7ee50bed40b2d986917cff37b
   - enabled: 1
     path: Assets/Scenes/PlayerVsPlayer.unity
     guid: e489e7b5f0284744392b36ce0dadbacc

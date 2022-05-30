@@ -3468,7 +3468,7 @@ MonoBehaviour:
   turnCounterText: {fileID: 979421378}
   playerHUD: {fileID: 537822253}
   enemyHUD: {fileID: 479967910}
-  multiplayer: 1
+  multiplayer: 0
 --- !u!4 &2041278760
 Transform:
   m_ObjectHideFlags: 0
@@ -3648,7 +3648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1594499013699748445, guid: 6eefee3354930124d9829d88c8ad0fc7, type: 3}
       propertyPath: m_FillAmount
-      value: 0.388
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6eefee3354930124d9829d88c8ad0fc7, type: 3}
@@ -3659,6 +3659,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1787763294}
     m_Modifications:
+    - target: {fileID: 5296000709395100421, guid: b2494e693dd87754b80de7bf86c041f3, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6808399498958463800, guid: b2494e693dd87754b80de7bf86c041f3, type: 3}
       propertyPath: m_Name
       value: EnemyBattleHud
