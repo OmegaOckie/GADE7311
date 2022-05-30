@@ -50,6 +50,9 @@ public class BattleSystem : MonoBehaviour
 
     public bool multiplayer = false;
 
+    public int difficultyScaling;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,12 +79,32 @@ public class BattleSystem : MonoBehaviour
         {
             GameObject player2GameObject = Instantiate(player2Prefab, player2BattleStation);
             player2Robot = player2GameObject.GetComponent<Robot>();
+
+            switch (difficultyScaling)
+            {
+                //Easy
+                case 1:
+                    difficultyScaling = 1;
+                    break;
+
+                //Medium
+                case 2:
+                    difficultyScaling = 2;
+                    break;
+
+                //Hard
+                case 3:
+                    difficultyScaling = 3;
+                    break;
+            }
         }
         else
         {
             GameObject enemyGameObject = Instantiate(enemyPrefab, enemyBattleStation);
             enemyRobot = enemyGameObject.GetComponent<Robot>();
         }
+
+
 
         //Displays visual information
         dialogueText.text = "The players have spawned.";
@@ -439,10 +462,10 @@ public class BattleSystem : MonoBehaviour
         if (!playerRobot.isGuarded)
         {
             //If player is one shot away from dying then attacking will be priotised
-            if (playerRobot.robotCurrentHealth <= 10)
+            if (playerRobot.robotCurrentHealth <= 10*difficultyScaling)
             {
                 //Enemy is able to attack since player is not guarded
-                isDead = playerRobot.TakeDamage(enemyRobot.robotDamage);
+                isDead = playerRobot.TakeDamage(enemyRobot.robotDamage * difficultyScaling);
                 dialogueText.text = enemyRobot.robotName + " decided to attack you!";
             }
             //Will cause the AI to block Randomly
@@ -457,7 +480,7 @@ public class BattleSystem : MonoBehaviour
             else
             {
                 //Enemy is able to attack since player is not guarded
-                isDead = playerRobot.TakeDamage(enemyRobot.robotDamage);
+                isDead = playerRobot.TakeDamage(enemyRobot.robotDamage * difficultyScaling);
                 dialogueText.text = enemyRobot.robotName + " decided to attack you!";
             }
 
@@ -473,7 +496,7 @@ public class BattleSystem : MonoBehaviour
             //AI decides to heal while below 50% HP
             if (enemyRobot.robotCurrentHealth < enemyRobot.robotMaxHealth)
             {
-                enemyRobot.Heal(5);
+                enemyRobot.Heal(5 * difficultyScaling);
                 dialogueText.text = enemyRobot.robotName + " has decided to heal!";
             }
             //AI decides next action randomly
@@ -502,7 +525,7 @@ public class BattleSystem : MonoBehaviour
                          
                         if (enemyRobot.robotCurrentHealth !>= enemyRobot.robotMaxHealth)
                         {
-                            enemyRobot.Heal(5);
+                            enemyRobot.Heal(5 * difficultyScaling);
                             dialogueText.text = enemyRobot.robotName + " has decided to heal!";
 
                         }
