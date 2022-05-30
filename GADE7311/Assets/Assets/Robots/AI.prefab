@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f71b8c3b535ff204694909098c4722fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robotName: Terminator
+  robotName: Butt
   robotMaxHealth: 100
   robotCurrentHealth: 100
   robotDamage: 10

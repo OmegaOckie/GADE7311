@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
+/// <summary>
+/// Lists the different states of the game for easier work flow
+/// </summary>
 public enum BattleState
 {
     START,
@@ -12,12 +15,9 @@ public enum BattleState
     PLAYER2TURN,
     ENEMYTURN,
     WON,
+    PLAYER1WON,
+    PLAYER2WON,
     LOST
-}
-
-public enum AiDifficulty
-{
-
 }
 
 public class BattleSystem : MonoBehaviour
@@ -42,12 +42,13 @@ public class BattleSystem : MonoBehaviour
     public TMP_Text turnCounterText;
 
     int turnCounter = 1;
+    int playerTurnCounter = 1;
 
     public BattleHUDScript playerHUD;
-    public BattleHUDScript player2HUD;
+    //public BattleHUDScript player2HUD;
     public BattleHUDScript enemyHUD;
 
-    public bool multiplayer;
+    public bool multiplayer = false;
 
     // Start is called before the first frame update
     void Start()
@@ -91,7 +92,7 @@ public class BattleSystem : MonoBehaviour
         //Switches between AI prefab or player 2 prefab if multiplayer is active
         if (multiplayer)
         {
-            player2HUD.SetHUD(player2Robot);
+            enemyHUD.SetHUD(player2Robot);
         }
         else
         {
@@ -103,7 +104,7 @@ public class BattleSystem : MonoBehaviour
 
         //Rotates game state to player's turn
         state = BattleState.PLAYER1TURN;
-        PlayerTurn(1);
+        PlayerTurn();
     }
 
     /// <summary>
@@ -113,42 +114,136 @@ public class BattleSystem : MonoBehaviour
     IEnumerator PlayerAttack()
     {
         bool isDead = false;
-        if (!enemyRobot.isGuarded)
-        {
-            //Damages the enemy robot and checks if the attack killed it.
-            isDead = enemyRobot.TakeDamage(playerRobot.robotDamage);
 
-            //Displays updated enemy HP and says you attacked.
-            enemyHUD.SetHP(enemyRobot.robotCurrentHealth);
-            dialogueText.text = "The attack is successful!";
-        }
-        else
+        if (!multiplayer)
         {
-            //Displays that the attack was unsuccessful and that the guard has been lowered
-            dialogueText.text = "The attack is unsuccessful!";
-            enemyRobot.isGuarded = false;
+            if (!enemyRobot.isGuarded)
+            {
+                //Damages the enemy robot and checks if the attack killed it.
+                isDead = enemyRobot.TakeDamage(playerRobot.robotDamage);
+
+                //Displays updated enemy HP and says you attacked.
+                enemyHUD.SetHP(enemyRobot.robotCurrentHealth);
+                dialogueText.text = "The attack is successful!";
+            }
+            else
+            {
+                //Displays that the attack was unsuccessful and that the guard has been lowered
+                dialogueText.text = "The attack is unsuccessful!";
+                enemyRobot.isGuarded = false;
+
+                yield return new WaitForSeconds(2f);
+
+                dialogueText.text = enemyRobot.robotName + "'s guard has been lowered!";
+            }
 
             yield return new WaitForSeconds(2f);
 
-            dialogueText.text = enemyRobot.robotName + "'s guard has been lowered!";
-        }
-
-
-        yield return new WaitForSeconds(2f);
-
-        //Checks if enemy died
-        if (isDead)
-        {
-            //If enemy died changes the state of the game to won and thus ending the game.
-            state = BattleState.WON;
-            EndBattle();
+            //Checks if enemy died
+            if (isDead)
+            {
+                //If enemy died changes the state of the game to won and thus ending the game.
+                state = BattleState.WON;
+                EndBattle();
+            }
+            else
+            {
+                //If enemy lives then continue the game and rotates the game state to enemy.
+                state = BattleState.ENEMYTURN;
+                StartCoroutine(EnemyTurn());
+            }
         }
         else
         {
-            //If enemy lives then continue the game and rotates the game state to enemy.
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
+            switch (playerTurnCounter)
+            {
+                case 1:
+                    if (!player2Robot.isGuarded)
+                    {
+                        //Damages the enemy robot and checks if the attack killed it.
+                        isDead = player2Robot.TakeDamage(player2Robot.robotDamage);
+
+                        //Displays updated enemy HP and says you attacked.
+                        enemyHUD.SetHP(player2Robot.robotCurrentHealth);
+                        dialogueText.text = "The attack is successful!";
+                    }
+                    else
+                    {
+                        //Displays that the attack was unsuccessful and that the guard has been lowered
+                        dialogueText.text = "The attack is unsuccessful!";
+                        player2Robot.isGuarded = false;
+
+                        yield return new WaitForSeconds(2f);
+
+                        dialogueText.text = player2Robot.robotName + "'s guard has been lowered!";
+                    }
+
+                    yield return new WaitForSeconds(2f);
+
+                    //Checks if enemy died
+                    if (isDead)
+                    {
+                        //If enemy died changes the state of the game to won and thus ending the game.
+                        state = BattleState.PLAYER1WON;
+                        EndBattle();
+                    }
+                    else
+                    {
+                        //If enemy lives then continue the game and rotates the game state to enemy.
+                        state = BattleState.PLAYER2TURN;
+                        playerTurnCounter++;
+                        PlayerTurn();
+                    }
+                    break;
+
+                case 2:
+                    if (!playerRobot.isGuarded)
+                    {
+                        //Damages the enemy robot and checks if the attack killed it.
+                        isDead = playerRobot.TakeDamage(playerRobot.robotDamage);
+
+                        //Displays updated enemy HP and says you attacked.
+                        playerHUD.SetHP(playerRobot.robotCurrentHealth);
+                        dialogueText.text = "The attack is successful!";
+                    }
+                    else
+                    {
+                        //Displays that the attack was unsuccessful and that the guard has been lowered
+                        dialogueText.text = "The attack is unsuccessful!";
+                        playerRobot.isGuarded = false;
+
+                        yield return new WaitForSeconds(2f);
+
+                        dialogueText.text = playerRobot.robotName + "'s guard has been lowered!";
+                    }
+
+                    yield return new WaitForSeconds(2f);
+
+                    //Checks if enemy died
+                    if (isDead)
+                    {
+                        //If enemy died changes the state of the game to won and thus ending the game.
+                        state = BattleState.PLAYER2WON;
+                        EndBattle();
+                    }
+                    else
+                    {
+                        //If enemy lives then continue the game and rotates the game state to enemy.
+                        state = BattleState.PLAYER1TURN;
+                        if (playerTurnCounter == 1)
+                        {
+                            playerTurnCounter++;
+                        }
+                        else
+                        {
+                            playerTurnCounter = 1;
+                        }
+                        PlayerTurn();
+                    }
+                    break;
+            }
         }
+
     }
 
     /// <summary>
@@ -157,19 +252,72 @@ public class BattleSystem : MonoBehaviour
     /// <returns></returns>
     IEnumerator PlayerHeal()
     {
+        if (!multiplayer)
+        {
+            //heals player by designated amount
+            playerRobot.Heal(5);
 
-        //heals player by designated amount
-        playerRobot.Heal(5);
+            //Displays player current HP
+            playerHUD.SetHP(playerRobot.robotCurrentHealth);
+            dialogueText.text = "You feel reinvigorated!";
 
-        //Displays player current HP
-        playerHUD.SetHP(playerRobot.robotCurrentHealth);
-        dialogueText.text = "You feel reinvigorated!";
+            yield return new WaitForSeconds(2f);
 
-        yield return new WaitForSeconds(2f);
+            //Rotates game state to the enemy's turn
+            state = BattleState.ENEMYTURN;
+            StartCoroutine(EnemyTurn());
+        }
+        else
+        {
+            switch (playerTurnCounter)
+            {
+                case 1:
+                    //heals player by designated amount
+                    playerRobot.Heal(5);
 
-        //Rotates game state to the enemy's turn
-        state = BattleState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
+                    //Displays player current HP
+                    playerHUD.SetHP(playerRobot.robotCurrentHealth);
+                    dialogueText.text = "You feel reinvigorated!";
+
+                    yield return new WaitForSeconds(2f);
+
+                    //Rotates game state to the enemy's turn
+                    state = BattleState.PLAYER2TURN;
+                    if (playerTurnCounter == 1)
+                    {
+                        playerTurnCounter++;
+                    }
+                    else
+                    {
+                        playerTurnCounter = 1;
+                    }
+                    PlayerTurn();
+                    break;
+                case 2:
+                    //heals player by designated amount
+                    player2Robot.Heal(5);
+
+                    //Displays player current HP
+                    enemyHUD.SetHP(player2Robot.robotCurrentHealth);
+                    dialogueText.text = "You feel reinvigorated!";
+
+                    yield return new WaitForSeconds(2f);
+
+                    //Rotates game state to the enemy's turn
+                    state = BattleState.PLAYER1TURN;
+                    state = BattleState.PLAYER2TURN;
+                    if (playerTurnCounter == 1)
+                    {
+                        playerTurnCounter++;
+                    }
+                    else
+                    {
+                        playerTurnCounter = 1;
+                    }
+                    PlayerTurn();
+                    break;
+            }
+        }
     }
 
     /// <summary>
@@ -178,32 +326,100 @@ public class BattleSystem : MonoBehaviour
     /// <returns></returns>
     IEnumerator PlayerGuard()
     {
-        //Makes the player guarded
-        playerRobot.Guard();
+        if (!multiplayer)
+        {
+            //Makes the player guarded
+            playerRobot.Guard();
 
-        //Displays that the player haschosen to guard themselves
-        dialogueText.text = "You guard yourself against attacks.";
+            //Displays that the player haschosen to guard themselves
+            dialogueText.text = "You guard yourself against attacks.";
 
-        yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(2f);
 
-        //Rotates the game state
-        state = BattleState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
+            //Rotates the game state
+            state = BattleState.ENEMYTURN;
+        }
+        else
+        {
+            switch (playerTurnCounter)
+            {
+                case 1:
+                    //Makes the player guarded
+                    playerRobot.Guard();
+
+                    //Displays that the player haschosen to guard themselves
+                    dialogueText.text = "You guard yourself against attacks.";
+
+                    yield return new WaitForSeconds(2f);
+
+                    //Rotates the game state
+                    state = BattleState.PLAYER2TURN;
+                    if (playerTurnCounter == 1)
+                    {
+                        playerTurnCounter++;
+                    }
+                    else
+                    {
+                        playerTurnCounter = 1;
+                    }
+                    PlayerTurn();
+                    break;
+                case 2:
+                    //Makes the player guarded
+                    player2Robot.Guard();
+
+                    //Displays that the player haschosen to guard themselves
+                    dialogueText.text = "You guard yourself against attacks.";
+
+                    yield return new WaitForSeconds(2f);
+
+                    //Rotates the game state
+                    state = BattleState.PLAYER1TURN;
+                    if (playerTurnCounter == 1)
+                    {
+                        playerTurnCounter++;
+                    }
+                    else
+                    {
+                        playerTurnCounter = 1;
+                    }
+                    PlayerTurn();
+                    break;
+            }
+        }
+
     }
 
     //Signifies that the game has ended
     void EndBattle()
     {
-        //Displays that the player has won
-        if (state == BattleState.WON)
+        if (!multiplayer)
         {
-            dialogueText.text = "You won the battle!";
+            //Displays that the player has won
+            if (state == BattleState.WON)
+            {
+                dialogueText.text = "You won the battle!";
+            }
+            //Displays that the player has lost
+            else if (state == BattleState.LOST)
+            {
+                dialogueText.text = "You were defeated...";
+            }
         }
-        //Displays that the player has lost
-        else if (state == BattleState.LOST)
+        else
         {
-            dialogueText.text = "You were defeated...";
+            //Displays that the player has won
+            if (state == BattleState.PLAYER1WON)
+            {
+                dialogueText.text = playerRobot + " won the battle!";
+            }
+            //Displays that the player has lost
+            else if (state == BattleState.PLAYER2WON)
+            {
+                dialogueText.text = player2Robot + " won the battle!";
+            }
         }
+
     }
 
     /// <summary>
@@ -325,10 +541,12 @@ public class BattleSystem : MonoBehaviour
         turnCounter++;
         turnCounterText.text = "Turn: " + turnCounter;
     }
-
-    void PlayerTurn(int player)
+    /// <summary>
+    /// Differentiates between Battle states
+    /// </summary>
+    void PlayerTurn()
     {
-        switch (player)
+        switch (playerTurnCounter)
         {
             case 1:
                 dialogueText.text = "Choose an action: " + playerRobot.robotName;
@@ -344,26 +562,32 @@ public class BattleSystem : MonoBehaviour
         }
 
     }
-
+    /// <summary>
+    /// When the player presses the Attack button it will run through this code that goes to the Attack method
+    /// </summary>
     public void AttackButton()
     {
-        if (state != BattleState.PLAYER1TURN || state != BattleState.PLAYER2TURN)
+        if (state != BattleState.PLAYER1TURN && state != BattleState.PLAYER2TURN)
             return;
             StartCoroutine(PlayerAttack());
         
     }
-
+    /// <summary>
+    /// When the player presses the Heal button it will run through this code that goes to the Heal method
+    /// </summary>
     public void HealButton()
     {
-        if (state != BattleState.PLAYER1TURN || state != BattleState.PLAYER2TURN)
+        if (state != BattleState.PLAYER1TURN && state != BattleState.PLAYER2TURN)
             return;
         StartCoroutine(PlayerHeal());
 
     }
-
+    /// <summary>
+    /// When the player presses the Guard button it will run through this code that goes to the Guard method
+    /// </summary>
     public void GuardButton()
     {
-        if (state != BattleState.PLAYER1TURN || state != BattleState.PLAYER2TURN)
+        if (state != BattleState.PLAYER1TURN && state != BattleState.PLAYER2TURN)
             return;
         StartCoroutine(PlayerGuard());
     }
