@@ -11,6 +11,8 @@ public class Robot : MonoBehaviour
 
     public float robotDamage;
 
+    public bool isGuarded;
+
     public bool TakeDamage(float damage)
     {
         robotCurrentHealth -= damage;
@@ -24,5 +26,15 @@ public class Robot : MonoBehaviour
     public void Heal(float healAmount)
     {
         robotCurrentHealth += healAmount;
+        if (robotCurrentHealth > robotMaxHealth)
+        {
+            robotCurrentHealth = robotMaxHealth;
+        }
+    }
+
+    public bool Guard()
+    {
+        isGuarded = true;
+        return isGuarded;
     }
 }

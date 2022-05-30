@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8853881542372397327}
   - component: {fileID: 8853881542372397326}
   - component: {fileID: 8853881542372397313}
-  - component: {fileID: 8853881542372397312}
   - component: {fileID: 5407286011502077172}
   m_Layer: 0
   m_Name: Player
@@ -100,25 +99,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &8853881542372397312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8853881542372397315}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97f75772f12e3814598e006cc7bc6676, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RoboName: P1
-  RoboMaxHealth: 100
-  RoboCurrentHealth: 100
-  RoboAttackStrength: 15
-  guarded: 0
-  enemyRobot: {fileID: 0}
-  playerRobot: {fileID: 8853881542372397312}
 --- !u!114 &5407286011502077172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,3 +115,4 @@ MonoBehaviour:
   robotMaxHealth: 100
   robotCurrentHealth: 100
   robotDamage: 10
+  isGuarded: 0
