@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
+    BattleSystem BattleSystem = new BattleSystem();
     public void GamePlay()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -24,5 +25,18 @@ public class Menu : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void SetToEasy()
+    {
+        BattleSystem.difficultyScaling = 1;
+    }
+    public void SetToMedium()
+    {
+        BattleSystem.difficultyScaling = 2;
+    }
+    public void SetToHard()
+    {
+        BattleSystem.difficultyScaling = 3;
     }
 }
