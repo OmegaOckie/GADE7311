@@ -1705,6 +1705,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8977708593995534935, guid: 59a2fd76d9f75c54985babb4028bbbf9, type: 3}
   m_PrefabInstance: {fileID: 1076253283}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1081453108
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1081453109}
+  m_Layer: 0
+  m_Name: mapStartposition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1081453109
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081453108}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1155661058
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2251,15 +2282,19 @@ MonoBehaviour:
   playerPrefab: {fileID: 8853881542372397315, guid: 0464b480656a0144789c7eda4dfa5326, type: 3}
   player2Prefab: {fileID: 3524830556479565121, guid: a0330efde1fa7814fa66d698a1117624, type: 3}
   enemyPrefab: {fileID: 3524830556479565121, guid: 295e07e6fd2ad8d45b207061527be46f, type: 3}
+  mapPrefab: {fileID: 6979080867593803408, guid: 59a2fd76d9f75c54985babb4028bbbf9, type: 3}
   playerBattleStation: {fileID: 1431080358}
   player2BattleStation: {fileID: 1876709931}
   enemyBattleStation: {fileID: 1051855601}
+  mapStartTransform: {fileID: 1081453109}
   state: 0
   dialogueText: {fileID: 1634315988}
   turnCounterText: {fileID: 1852828994}
   playerHUD: {fileID: 1785337869}
   enemyHUD: {fileID: 288887037}
   multiplayer: 1
+  difficultyScaling: 0
+  neuralNetwork: {fileID: 0}
 --- !u!4 &1316428657
 Transform:
   m_ObjectHideFlags: 0

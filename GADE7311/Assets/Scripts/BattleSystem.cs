@@ -28,10 +28,12 @@ public class BattleSystem : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject player2Prefab;
     public GameObject enemyPrefab;
+    public GameObject mapPrefab;
 
     public Transform playerBattleStation;
     public Transform player2BattleStation;
     public Transform enemyBattleStation;
+    public Transform mapStartTransform;
 
     Robot playerRobot;
     Robot player2Robot;
@@ -53,6 +55,9 @@ public class BattleSystem : MonoBehaviour
 
     public int difficultyScaling;
 
+    public NeuralNetwork neuralNetwork;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +68,20 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(SetupBattle());
     }
 
+    private void CreateMap()
+    {
+        for (int x = 0; x < UnityEngine.Random.Range(5,10); x++)
+        {
+            for (int z = 0; z < UnityEngine.Random.Range(-5, -10); z--)
+            {
+                mapStartTransform.transform.position = new Vector3(x, 0, z);
+                //GameObject map = Instantiate(mapPrefab, mapStartTransform);
+                Instantiate(mapPrefab, new Vector3(x,0,z), Quaternion.identity);
+                Debug.Log("Placed map block at: " + x + ", " + z);
+            }
+        }
+        
+    }
     /// <summary>
     /// Instantiates robots and declares pre-battle data
     /// </summary>
@@ -73,6 +92,8 @@ public class BattleSystem : MonoBehaviour
         //Instantiation
         GameObject playerGameObject = Instantiate(playerPrefab, playerBattleStation);
         playerRobot = playerGameObject.GetComponent<Robot>();
+
+        CreateMap();
 
         //Switches between AI prefab or player 2 prefab if multiplayer is active
         if (multiplayer)

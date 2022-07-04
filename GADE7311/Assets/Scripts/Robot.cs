@@ -13,6 +13,7 @@ public class Robot : MonoBehaviour
 
     public bool isGuarded;
 
+    public NeuralNetwork neuralNetwork;
 
     public bool TakeDamage(float damage)
     {

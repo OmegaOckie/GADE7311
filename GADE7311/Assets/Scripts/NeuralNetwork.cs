@@ -16,7 +16,7 @@ public class NeuralNetwork : MonoBehaviour
 
     public float fitness = 0;
 
-    public NeuralNetwork(int[] layers, string[] layerActivations)
+    public NeuralNetwork(int[] layers)
     {
         this.layers = new int[layers.Length];
         for (int i = 0; i < layers.Length; i++)
