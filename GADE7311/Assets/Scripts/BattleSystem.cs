@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.IO;
 
 /// <summary>
 /// Lists the different states of the game for easier work flow
@@ -51,7 +52,6 @@ public class BattleSystem : MonoBehaviour
     public bool multiplayer = false;
 
     public int difficultyScaling;
-
 
     // Start is called before the first frame update
     void Start()
@@ -614,4 +614,5 @@ public class BattleSystem : MonoBehaviour
             return;
         StartCoroutine(PlayerGuard());
     }
+
 }
